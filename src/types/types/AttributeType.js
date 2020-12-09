@@ -1,8 +1,8 @@
 import { BaseAttribute } from '../attributes/BaseAttribute'
+import { DefaultAttribute } from '../attributes/DefaultAttribute'
+import { VarcharAttribute } from '../attributes/VarcharAttribute'
 import { typeLoader } from '../TypeLoader'
 import { DefaultValidator } from '../validators/DefaultValidator'
-import { VarcharAttribute } from '../attributes/VarcharAttribute'
-import { DefaultAttribute } from '../attributes/DefaultAttribute'
 
 export class AttributeType extends BaseAttribute {
   constructor (config) {
@@ -12,6 +12,7 @@ export class AttributeType extends BaseAttribute {
     this.title = config.title
     this.attribute_type = config.attribute_type
     this.validator = config.validator
+    this.is_computed = config.is_computed
   }
 
   createAttribute () {
@@ -36,6 +37,8 @@ export class AttributeType extends BaseAttribute {
     } else {
       attribute.validator = new DefaultValidator()
     }
+
+    attribute.is_computed = this.is_computed
 
     return attribute
   }

@@ -27,6 +27,8 @@ class ApiClient {
           query: query
         })
       })
+
+      result.data.data = result.data.data.map(d => this.createModel(d))
       return result.data
     } catch (e) {
       console.log(e)
