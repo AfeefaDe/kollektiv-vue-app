@@ -15,16 +15,16 @@ export class VarcharValidator extends BaseValidator {
   }
 
   required = value => {
-    if (this.rules.require_on) {
+    if (this.rules.require_on.param) {
       if (!value) {
-        return this.getValidationMessage(this.rules.required)
+        return this.getValidationMessage(this.rules.require_on)
       }
     }
     return true
   }
 
   min = value => {
-    if (!this.rules.require_on && !value) {
+    if (!this.rules.require_on.param && !value) {
       return true
     }
 
@@ -46,13 +46,12 @@ export class VarcharValidator extends BaseValidator {
   }
 
   regex = value => {
-    if (!this.rules.require_on && !value) {
+    if (!this.rules.require_on.param && !value) {
       return true
     }
 
     if (this.rules.regex && this.rules.regex.param) {
       if (!(new RegExp(this.rules.regex.param).test(value))) {
-        // console.log('invalid', this.rules.regex.param, value)
         return this.getValidationMessage(this.rules.regex)
       }
     }
