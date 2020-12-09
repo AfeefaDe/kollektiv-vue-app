@@ -22,12 +22,12 @@ class ApiClient {
     }
 
     try {
-      const result = await axios.post(this.endpoint + '/list', {
-        query: query
+      const result = await this.lastMinMilliSeconds(300, () => {
+        return axios.post(this.endpoint + '/list', {
+          query: query
+        })
       })
-      return timeout(() => {
-        return result.data
-      }, 500)
+      return result.data
     } catch (e) {
       console.log(e)
       eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
@@ -53,15 +53,15 @@ class ApiClient {
     }
 
     try {
-      const result = await axios.post(this.endpoint + '/get', {
-        query
+      const result = await this.lastMinMilliSeconds(300, () => {
+        return axios.post(this.endpoint + '/get', {
+          query
+        })
       })
 
-      return timeout(() => {
-        const data = result.data.data
-        const model = this.createModel(data)
-        return model
-      }, 500)
+      const data = result.data.data
+      const model = this.createModel(data)
+      return model
     } catch (e) {
       eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
       return null
@@ -79,17 +79,17 @@ class ApiClient {
     try {
       eventBus.$emit(SaveEvent.START_SAVING)
 
-      const result = await axios.post(this.endpoint + '/save', {
-        query: query
+      const result = await this.lastMinMilliSeconds(800, () => {
+        return axios.post(this.endpoint + '/save', {
+          query: query
+        })
       })
 
-      return timeout(() => {
-        eventBus.$emit(SaveEvent.STOP_SAVING)
+      eventBus.$emit(SaveEvent.STOP_SAVING)
 
-        const data = result.data.data
-        const model = this.createModel(data)
-        return model
-      }, 500)
+      const data = result.data.data
+      const model = this.createModel(data)
+      return model
     } catch (e) {
       eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
       eventBus.$emit(SaveEvent.STOP_SAVING)
@@ -100,6 +100,21 @@ class ApiClient {
   createModel (data) {
     const modelType = typeLoader.getModelType(data.type)
     return modelType.createModel(data)
+  }
+
+  async lastMinMilliSeconds (milliseconds, callback) {
+    const t1 = new Date().getTime()
+
+    const result = await callback()
+
+    const duration = new Date().getTime() - t1
+    const timeLeft = Math.max(0, milliseconds - duration)
+
+    // console.log(milliseconds, duration, timeLeft)
+
+    return timeout(() => {
+      return result
+    }, timeLeft)
   }
 }
 
