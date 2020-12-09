@@ -72,8 +72,8 @@ class ApiClient {
     const query = {
       type,
       id,
-      fields,
-      updates
+      updates,
+      fields
     }
 
     try {

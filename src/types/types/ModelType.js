@@ -17,7 +17,7 @@ export default class ModelType {
     this.relationTypes = config.relations.map(r => new RelationType(r))
   }
 
-  createModel (data) {
+  createModel (data = {}) {
     const model = new Model()
 
     model.$attributes = this.attributeTypes.reduce(function (map, attributeType) {
