@@ -46,6 +46,10 @@ export class VarcharValidator extends BaseValidator {
   }
 
   regex = value => {
+    if (!this.rules.require_on && !value) {
+      return true
+    }
+
     if (this.rules.regex && this.rules.regex.param) {
       if (!(new RegExp(this.rules.regex.param).test(value))) {
         // console.log('invalid', this.rules.regex.param, value)

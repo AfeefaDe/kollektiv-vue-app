@@ -30,8 +30,8 @@ export default class ModelType {
       return map
     }, {})
 
-    model.id = data.id
-    model.type = data.type
+    model.id = data.id || null
+    model.type = this.type
 
     this.attributeTypes.forEach(a => {
       const attribute = model.$attributes[a.name]
