@@ -5,13 +5,13 @@ import { RelationType } from './RelationType'
 
 export default class ModelType {
   type = null
-  title = null
+  translations = []
   attributeTypes = {}
   relationTypes = {}
 
   constructor (config) {
     this.type = config.type
-    this.title = config.title
+    this.translations = config.translations
 
     this.attributeTypes = config.attributes.map(a => new AttributeType(a))
     this.relationTypes = config.relations.map(r => new RelationType(r))
@@ -46,6 +46,10 @@ export default class ModelType {
     })
 
     return model
+  }
+
+  getTranslation (key) {
+    return this.translations.de[key]
   }
 
   get queryAttributes () {
