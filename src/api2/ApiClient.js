@@ -31,7 +31,7 @@ class ApiClient {
       result.data.data = result.data.data.map(d => this.createModel(d))
       return result.data
     } catch (e) {
-      console.log(e)
+      console.error(e)
       eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
       return null
     }
@@ -65,6 +65,7 @@ class ApiClient {
       const model = this.createModel(data)
       return model
     } catch (e) {
+      console.error(e)
       eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
       return null
     }
@@ -93,6 +94,7 @@ class ApiClient {
       const model = this.createModel(data)
       return model
     } catch (e) {
+      console.error(e)
       eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
       eventBus.$emit(SaveEvent.STOP_SAVING)
       return null

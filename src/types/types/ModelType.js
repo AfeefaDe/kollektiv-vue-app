@@ -41,7 +41,7 @@ export default class ModelType {
 
     this.relationTypes.forEach(r => {
       const modelType = typeLoader.getModelType(r.related_type)
-      const related = modelType.createModel(data[r.name])
+      const related = data[r.name] ? modelType.createModel(data[r.name]) : null
       model[r.name] = related
     })
 
