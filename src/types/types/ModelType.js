@@ -50,6 +50,7 @@ export default class ModelType {
 
       let related
 
+      // TODO init empty related model only if relation.validator.min > 0
       if (!data[r.name] && r.relation_type === 'Kollektiv\\HasOne') {
         related = modelType.createModel()
       } else {

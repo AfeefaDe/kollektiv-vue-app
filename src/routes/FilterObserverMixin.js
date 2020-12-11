@@ -68,7 +68,7 @@ export class FilterObserverMixin extends Vue {
     this.fom_filters.forEach(f => f.initFromUrl(query))
   }
 
-  fom_initFiltersFromUsed (usedFilters, filterOptions) {
+  fom_initFiltersFromUsed (usedFilters = {}, filterOptions = {}) {
     this.fom_skipReload = true
     this.fom_filters.forEach(f => f.initFromUsed(usedFilters, filterOptions))
 
@@ -102,5 +102,15 @@ export class FilterObserverMixin extends Vue {
 
   fom_getFilter (filterName) {
     return this.fom_filters.find(f => f.name === filterName)
+  }
+
+  fom_hasFilterValue (filterName) {
+    const query = this.$route.query
+    return !!query[filterName]
+  }
+
+  fom_hasOtherFilterValue (filterName) {
+    const query = this.$route.query
+    return !!Object.keys(query).find(k => k !== filterName && query[k])
   }
 }

@@ -11,13 +11,7 @@ class ApiClient {
   endpoint = null
   requestId = 0
 
-  async list ({type, fields, filters}, info) {
-    const query = {
-      type: type,
-      fields,
-      filters
-    }
-
+  async list (query, info) {
     try {
       const result = await this.lastMinMilliSeconds(300, () => {
         const cancelSource = axios.CancelToken.source()
