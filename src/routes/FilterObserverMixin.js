@@ -68,9 +68,9 @@ export class FilterObserverMixin extends Vue {
     this.fom_filters.forEach(f => f.initFromUrl(query))
   }
 
-  fom_initFiltersFromUsed (usedFilters) {
+  fom_initFiltersFromUsed (usedFilters, filterOptions) {
     this.fom_skipReload = true
-    this.fom_filters.forEach(f => f.initFromUsed(usedFilters))
+    this.fom_filters.forEach(f => f.initFromUsed(usedFilters, filterOptions))
 
     this.$nextTick(() => {
       this.fom_skipReload = false

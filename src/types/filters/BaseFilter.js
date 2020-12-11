@@ -2,6 +2,7 @@ export class BaseFilter {
   name = null
   title = null
   filter_type = null
+  value = null
 
   clone () {
     const filter = new this.constructor()
@@ -13,7 +14,7 @@ export class BaseFilter {
 
   toUrlParams () {
     return {
-      [this.name]: this.value || undefined
+      [this.name]: this.value ? this.value.toString() : undefined
     }
   }
 
@@ -29,7 +30,7 @@ export class BaseFilter {
     }
   }
 
-  initFromUsed (usedFilters) {
+  initFromUsed (usedFilters, filterOptions) {
     if (usedFilters[this.name]) {
       this.value = usedFilters[this.name]
     }
