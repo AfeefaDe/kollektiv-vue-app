@@ -1,12 +1,16 @@
 export class Model {
   $attributes = {}
   $relations = {}
+  $data = {}
 
   constructor () {
     Object.defineProperty(this, '$attributes', {
       enumerable: false
     })
     Object.defineProperty(this, '$relations', {
+      enumerable: false
+    })
+    Object.defineProperty(this, '$data', {
       enumerable: false
     })
   }

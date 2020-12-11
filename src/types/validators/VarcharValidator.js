@@ -3,7 +3,7 @@ import { BaseValidator } from './BaseValidator'
 export class VarcharValidator extends BaseValidator {
   getRules () {
     const rules = [
-      this.required,
+      this.empty,
 
       this.min,
 
@@ -14,17 +14,17 @@ export class VarcharValidator extends BaseValidator {
     return rules
   }
 
-  required = value => {
-    if (this.rules.require_on.param) {
+  empty = value => {
+    if (this.rules.empty.param === false) {
       if (!value) {
-        return this.getValidationMessage(this.rules.require_on)
+        return this.getValidationMessage(this.rules.empty)
       }
     }
     return true
   }
 
   min = value => {
-    if (!this.rules.require_on.param && !value) {
+    if (this.rules.empty.param !== false && !value) {
       return true
     }
 
@@ -46,7 +46,7 @@ export class VarcharValidator extends BaseValidator {
   }
 
   regex = value => {
-    if (!this.rules.require_on.param && !value) {
+    if (this.rules.empty.param !== false && !value) {
       return true
     }
 

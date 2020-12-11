@@ -113,4 +113,8 @@ export class FilterObserverMixin extends Vue {
     const query = this.$route.query
     return !!Object.keys(query).find(k => k !== filterName && query[k])
   }
+
+  fom_markFiltersInvalid () {
+    filterHistory.markFiltersInvalid(this.$route.path)
+  }
 }

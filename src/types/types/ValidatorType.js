@@ -35,7 +35,7 @@ export default class ValidatorType {
     })
 
     Object.keys(validator.rules).forEach(rule => {
-      if (data.rules[rule]) {
+      if (data.rules[rule] !== undefined) {
         validator.rules[rule].param = data.rules[rule]
       }
     })

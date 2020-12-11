@@ -25,6 +25,7 @@ export default class ModelType {
 
   createModel (data = {}) {
     const model = new Model()
+    model.$data = data
 
     model.$attributes = this.attributeTypes.reduce(function (map, attributeType) {
       map[attributeType.name] = attributeType.createAttribute()
@@ -61,6 +62,10 @@ export default class ModelType {
     })
 
     return model
+  }
+
+  resetModel (model) {
+    return this.createModel(model.$data)
   }
 
   getTranslation (key) {
