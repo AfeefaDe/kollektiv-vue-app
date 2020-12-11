@@ -1,5 +1,4 @@
 import { BaseAttribute } from '../attributes/BaseAttribute'
-import { DefaultAttribute } from '../attributes/DefaultAttribute'
 import { VarcharAttribute } from '../attributes/VarcharAttribute'
 import { typeLoader } from '../TypeLoader'
 import { DefaultValidator } from '../validators/DefaultValidator'
@@ -22,8 +21,10 @@ export class AttributeType extends BaseAttribute {
       case 'Kollektiv\\Varchar':
         attribute = new VarcharAttribute()
         break
-      default:
-        attribute = new DefaultAttribute()
+    }
+
+    if (!attribute) {
+      console.error('There is no attribute of class', this.attribute_type)
     }
 
     attribute.name = this.name

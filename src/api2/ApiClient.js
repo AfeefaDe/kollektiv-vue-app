@@ -9,37 +9,45 @@ import { ApiError } from './ApiError'
 
 class ApiClient {
   endpoint = null
+  requestId = 0
 
-  async list (type, fields, keyword = '', page = 1, page_size = 5) {
+  async list ({type, fields, filters, info}) {
     const query = {
       type: type,
       fields,
-      filters: {
-        query: keyword,
-        page,
-        page_size
-      }
+      filters
     }
 
     try {
       const result = await this.lastMinMilliSeconds(300, () => {
-        return axios.post(this.endpoint + '/list', {
-          query: query
-        })
+        const cancelSource = axios.CancelToken.source()
+        if (info) {
+          info({
+            cancel: cancelSource.cancel,
+            requestId: ++this.requestId
+          })
+        }
+        return axios.post(
+          this.endpoint + '/list',
+          { query },
+          { cancelToken: cancelSource.token }
+        )
       })
 
       result.data.data = result.data.data.map(d => this.createModel(d))
       return result.data
     } catch (e) {
-      console.error(e)
-      eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
+      if (!(e instanceof axios.Cancel)) {
+        console.error(e)
+        eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
+      }
       return null
     }
   }
 
   async loadTypes () {
     try {
-      const result = await axios.get('/api2/types')
+      const result = await axios.get(this.endpoint + '/types')
       return result.data
     } catch (e) {
       eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)

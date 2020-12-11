@@ -8,6 +8,7 @@ export default class ModelType {
   translations = []
   attributeTypes = {}
   relationTypes = {}
+  filters = {}
 
   constructor (config) {
     this.type = config.type
@@ -15,6 +16,11 @@ export default class ModelType {
 
     this.attributeTypes = config.attributes.map(a => new AttributeType(a))
     this.relationTypes = config.relations.map(r => new RelationType(r))
+
+    this.filters = config.filters.map(f => {
+      const filterType = typeLoader.getFilterType(f.filter_type)
+      return filterType.createFilter(f)
+    })
   }
 
   createModel (data = {}) {
@@ -50,6 +56,10 @@ export default class ModelType {
 
   getTranslation (key) {
     return this.translations.de[key]
+  }
+
+  getFilters () {
+    return this.filters
   }
 
   get queryAttributes () {

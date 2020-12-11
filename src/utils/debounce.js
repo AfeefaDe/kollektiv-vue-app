@@ -1,12 +1,14 @@
-let timeout = null
 
-export async function debounce (callback, delay = 300) {
-  if (timeout) {
-    clearTimeout(timeout)
+export function debounce (callback, delay = 300) {
+  let timeout = null
+  return function () {
+    if (timeout) {
+      clearTimeout(timeout)
+    }
+
+    const args = arguments
+    timeout = setTimeout(() => {
+      callback(...args)
+    }, delay)
   }
-
-  timeout = setTimeout(() => {
-    clearTimeout(timeout)
-    callback()
-  }, delay)
 }

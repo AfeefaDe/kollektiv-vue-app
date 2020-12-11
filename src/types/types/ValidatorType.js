@@ -13,12 +13,17 @@ export default class ValidatorType {
   createValidator (fieldName, data) {
     let validator
 
-    if (data.validator_type === 'Kollektiv\\Varchar') {
-      validator = new VarcharValidator()
-    } else if (data.validator_type === 'Kollektiv\\HasOne') {
-      validator = new HasOneValidator()
-    } else {
-      console.error('There is no validator of class', data.validator_type)
+    switch (this.validator_type) {
+      case 'Kollektiv\\Varchar':
+        validator = new VarcharValidator()
+        break
+      case 'Kollektiv\\HasOne':
+        validator = new HasOneValidator()
+        break
+    }
+
+    if (!validator) {
+      console.error('There is no validator of class', this.validator_type)
     }
 
     validator.fieldName = fieldName
