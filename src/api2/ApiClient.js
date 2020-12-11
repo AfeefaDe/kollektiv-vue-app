@@ -11,7 +11,7 @@ class ApiClient {
   endpoint = null
   requestId = 0
 
-  async list ({type, fields, filters, info}) {
+  async list ({type, fields, filters}, info) {
     const query = {
       type: type,
       fields,
@@ -21,12 +21,14 @@ class ApiClient {
     try {
       const result = await this.lastMinMilliSeconds(300, () => {
         const cancelSource = axios.CancelToken.source()
+
         if (info) {
           info({
             cancel: cancelSource.cancel,
             requestId: ++this.requestId
           })
         }
+
         return axios.post(
           this.endpoint + '/list',
           { query },

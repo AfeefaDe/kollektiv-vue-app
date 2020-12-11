@@ -87,4 +87,20 @@ export class FilterObserverMixin extends Vue {
       return map
     }, {})
   }
+
+  fom_resetFilters (filterName = null) {
+    this.fom_filters.forEach(f => {
+      if (filterName) {
+        if (filterName === f.name) {
+          f.reset()
+        }
+      } else {
+        f.reset()
+      }
+    })
+  }
+
+  fom_getFilter (filterName) {
+    return this.fom_filters.find(f => f.name === filterName)
+  }
 }

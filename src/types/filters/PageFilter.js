@@ -33,4 +33,11 @@ export class PageFilter extends BaseFilter {
       this.value.page_size = usedFilters.page.page_size
     }
   }
+
+  reset () {
+    this.value = {
+      page: 1,
+      page_size: 10
+    }
+  }
 }

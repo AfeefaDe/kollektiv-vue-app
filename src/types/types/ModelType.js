@@ -47,7 +47,15 @@ export default class ModelType {
 
     this.relationTypes.forEach(r => {
       const modelType = typeLoader.getModelType(r.related_type)
-      const related = data[r.name] ? modelType.createModel(data[r.name]) : null
+
+      let related
+
+      if (!data[r.name] && r.relation_type === 'Kollektiv\\HasOne') {
+        related = modelType.createModel()
+      } else {
+        related = data[r.name] ? modelType.createModel(data[r.name]) : null
+      }
+
       model[r.name] = related
     })
 

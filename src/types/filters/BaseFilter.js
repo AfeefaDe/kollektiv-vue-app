@@ -35,4 +35,8 @@ export class BaseFilter {
       this.value = usedFilters[this.name]
     }
   }
+
+  reset () {
+    this.value = null
+  }
 }
