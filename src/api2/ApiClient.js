@@ -88,7 +88,7 @@ class ApiClient {
 
       const result = await this.lastMinMilliSeconds(800, () => {
         return axios.post(this.endpoint + '/save', {
-          query: query
+          query
         })
       })
 
@@ -97,6 +97,27 @@ class ApiClient {
       const data = result.data.data
       const model = this.createModel(data)
       return model
+    } catch (e) {
+      console.error(e)
+      eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
+      eventBus.$emit(SaveEvent.STOP_SAVING)
+      return null
+    }
+  }
+
+  async delete (query) {
+    try {
+      eventBus.$emit(SaveEvent.START_SAVING)
+
+      await this.lastMinMilliSeconds(800, () => {
+        return axios.post(this.endpoint + '/delete', {
+          query
+        })
+      })
+
+      eventBus.$emit(SaveEvent.STOP_SAVING)
+
+      return true
     } catch (e) {
       console.error(e)
       eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
