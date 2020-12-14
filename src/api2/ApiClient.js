@@ -35,7 +35,9 @@ class ApiClient {
     } catch (e) {
       if (!(e instanceof axios.Cancel)) {
         console.error(e)
-        eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
+        eventBus.$emit(new AlertEvent(AlertEvent.ERROR, {
+          message: new ApiError(e).message
+        }))
       }
       return null
     }
@@ -46,7 +48,9 @@ class ApiClient {
       const result = await axios.get(this.endpoint + '/types')
       return result.data
     } catch (e) {
-      eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
+      eventBus.$emit(new AlertEvent(AlertEvent.ERROR, {
+        message: new ApiError(e).message
+      }))
       return null
     }
   }
@@ -70,7 +74,9 @@ class ApiClient {
       return model
     } catch (e) {
       console.error(e)
-      eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
+      eventBus.$emit(new AlertEvent(AlertEvent.ERROR, {
+        message: new ApiError(e).message
+      }))
       return null
     }
   }
@@ -84,7 +90,7 @@ class ApiClient {
     }
 
     try {
-      eventBus.$emit(SaveEvent.START_SAVING)
+      eventBus.$emit(new SaveEvent(SaveEvent.START_SAVING))
 
       const result = await this.lastMinMilliSeconds(800, () => {
         return axios.post(this.endpoint + '/save', {
@@ -92,22 +98,24 @@ class ApiClient {
         })
       })
 
-      eventBus.$emit(SaveEvent.STOP_SAVING)
+      eventBus.$emit(new SaveEvent(SaveEvent.STOP_SAVING))
 
       const data = result.data.data
       const model = this.createModel(data)
       return model
     } catch (e) {
       console.error(e)
-      eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
-      eventBus.$emit(SaveEvent.STOP_SAVING)
+      eventBus.$emit(new AlertEvent(AlertEvent.ERROR, {
+        message: new ApiError(e).message
+      }))
+      eventBus.$emit(new SaveEvent(SaveEvent.STOP_SAVING))
       return null
     }
   }
 
   async delete (query) {
     try {
-      eventBus.$emit(SaveEvent.START_SAVING)
+      eventBus.$emit(new SaveEvent(SaveEvent.START_SAVING))
 
       await this.lastMinMilliSeconds(800, () => {
         return axios.post(this.endpoint + '/delete', {
@@ -115,13 +123,15 @@ class ApiClient {
         })
       })
 
-      eventBus.$emit(SaveEvent.STOP_SAVING)
+      eventBus.$emit(new SaveEvent(SaveEvent.STOP_SAVING))
 
       return true
     } catch (e) {
       console.error(e)
-      eventBus.$emit(AlertEvent.ERROR, new ApiError(e).message)
-      eventBus.$emit(SaveEvent.STOP_SAVING)
+      eventBus.$emit(new AlertEvent(AlertEvent.ERROR, {
+        message: new ApiError(e).message
+      }))
+      eventBus.$emit(new SaveEvent(SaveEvent.STOP_SAVING))
       return null
     }
   }
