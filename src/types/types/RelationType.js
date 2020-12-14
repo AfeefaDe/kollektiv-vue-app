@@ -1,7 +1,7 @@
+import { BaseRelation } from '../relations/BaseRelation'
+import { DefaultRelation } from '../relations/DefaultRelation'
 import { typeLoader } from '../TypeLoader'
 import { DefaultValidator } from '../validators/DefaultValidator'
-import { DefaultRelation } from '../relations/DefaultRelation'
-import { BaseRelation } from '../relations/BaseRelation'
 
 export class RelationType extends BaseRelation {
   constructor (config) {
@@ -11,7 +11,7 @@ export class RelationType extends BaseRelation {
     this.title = config.title
     this.relation_type = config.relation_type
     this.related_type = config.related_type
-    this.validator = config.validator
+    this.validate = config.validate
   }
 
   createRelation () {
@@ -22,9 +22,9 @@ export class RelationType extends BaseRelation {
     relation.relation_type = this.relation_type
     relation.related_type = this.related_type
 
-    if (this.validator) {
-      const validatorType = typeLoader.getValidatorType(this.validator.validator_type)
-      const validator = validatorType.createValidator(this.title, this.validator)
+    if (this.validate) {
+      const validatorType = typeLoader.getValidatorType(this.validate.validator_type)
+      const validator = validatorType.createValidator(this.title, this.validate)
       relation.validator = validator
     } else {
       relation.validator = new DefaultValidator()

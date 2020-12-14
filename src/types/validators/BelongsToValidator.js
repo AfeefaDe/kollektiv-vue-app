@@ -1,6 +1,6 @@
 import { BaseValidator } from './BaseValidator'
 
-export class HasOneValidator extends BaseValidator {
+export class BelongsToValidator extends BaseValidator {
   getRules () {
     const rules = [
       this.empty

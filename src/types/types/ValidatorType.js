@@ -1,3 +1,4 @@
+import { BelongsToValidator } from '../validators/BelongsToValidator'
 import { HasOneValidator } from '../validators/HasOneValidator'
 import { VarcharValidator } from '../validators/VarcharValidator'
 
@@ -20,6 +21,9 @@ export default class ValidatorType {
       case 'Kollektiv\\HasOne':
         validator = new HasOneValidator()
         break
+      case 'Kollektiv\\BelongsTo':
+        validator = new BelongsToValidator()
+        break
     }
 
     if (!validator) {
@@ -28,18 +32,21 @@ export default class ValidatorType {
 
     validator.fieldName = fieldName
 
-    Object.keys(this.rules).forEach(rule => {
-      validator.rules[rule] = {
-        ...this.rules[rule]
-      }
-    })
-
-    Object.keys(validator.rules).forEach(rule => {
-      if (data.rules[rule] !== undefined) {
-        validator.rules[rule].param = data.rules[rule]
+    this.rules.forEach(globalRule => {
+      let localRule = this.getRule(data.rules, globalRule.name)
+      if (localRule) {
+        localRule = {
+          ...globalRule,
+          ...localRule
+        }
+        validator.rules.push(localRule)
       }
     })
 
     return validator
+  }
+
+  getRule (rules, name) {
+    return rules.find(r => r.name === name)
   }
 }

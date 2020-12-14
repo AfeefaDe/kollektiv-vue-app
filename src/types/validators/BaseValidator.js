@@ -1,16 +1,22 @@
 export class BaseValidator {
   fieldName = null
-  rules = {}
+  rules = []
 
   getRules () {
     return []
   }
 
-  getRuleParam (ruleName) {
-    return this.rules[ruleName] && this.rules[ruleName].param
+  getRule (name) {
+    return this.rules.find(r => r.name === name)
   }
 
-  getValidationMessage (rule, params = {}) {
+  getRuleParam (name) {
+    const rule = this.getRule(name)
+    return rule && rule.param
+  }
+
+  getValidationMessage (name, params = {}) {
+    const rule = this.getRule(name)
     params.fieldName = this.fieldName
     params.param = rule.param
 

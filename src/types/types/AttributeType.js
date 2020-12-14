@@ -10,7 +10,7 @@ export class AttributeType extends BaseAttribute {
     this.name = config.name
     this.title = config.title
     this.attribute_type = config.attribute_type
-    this.validator = config.validator
+    this.validate = config.validate
     this.is_computed = config.is_computed
   }
 
@@ -31,9 +31,9 @@ export class AttributeType extends BaseAttribute {
     attribute.title = this.title
     attribute.attribute_type = this.attribute_type
 
-    if (this.validator) {
-      const validatorType = typeLoader.getValidatorType(this.validator.validator_type)
-      const validator = validatorType.createValidator(this.title, this.validator)
+    if (this.validate) {
+      const validatorType = typeLoader.getValidatorType(this.validate.validator_type)
+      const validator = validatorType.createValidator(this.title, this.validate)
       attribute.validator = validator
     } else {
       attribute.validator = new DefaultValidator()
