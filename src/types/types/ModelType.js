@@ -1,9 +1,10 @@
-import { Model } from '../Model'
+// import { Model } from '../Model'
 import { typeLoader } from '../TypeLoader'
 import { AttributeType } from './AttributeType'
 import { RelationType } from './RelationType'
 
 export default class ModelType {
+  Class = null
   type = null
   translations = []
   attributeTypes = {}
@@ -11,6 +12,7 @@ export default class ModelType {
   filters = {}
 
   constructor (config) {
+    this.Class = config.Class
     this.type = config.type
     this.translations = config.translations
 
@@ -24,7 +26,7 @@ export default class ModelType {
   }
 
   createModel (data = {}) {
-    const model = new Model()
+    const model = new this.Class()
     model.$data = data
 
     model.$attributes = this.attributeTypes.reduce(function (map, attributeType) {
@@ -76,14 +78,14 @@ export default class ModelType {
     return this.filters
   }
 
-  get queryAttributes () {
+  getDefaultQueryAttributes () {
     const fields = this.attributeTypes.map(a => a.name)
 
     const relations = this.relationTypes
     relations.forEach(r => {
       const relatedType = typeLoader.getModelType(r.related_type)
       fields.push({
-        [r.name]: relatedType.queryAttributes
+        [r.name]: relatedType.getDefaultQueryAttributes()
       })
     })
 
