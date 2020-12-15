@@ -3,7 +3,7 @@ import { BaseFilter } from './BaseFilter'
 export class PageFilter extends BaseFilter {
   value = {
     page: 1,
-    page_size: 10
+    page_size: 15
   }
 
   toUrlParams () {

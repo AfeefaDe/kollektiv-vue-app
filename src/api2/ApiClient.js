@@ -2,6 +2,7 @@ import axios from 'axios'
 
 import { AlertEvent } from '../events/AlertEvent'
 import { eventBus } from '../events/EventBus'
+import { ModelEvent } from '../events/ModelEvent'
 import { SaveEvent } from '../events/SaveEvent'
 import { typeLoader } from '../types/TypeLoader'
 import { timeout } from '../utils/timeout'
@@ -99,6 +100,9 @@ class ApiClient {
       })
 
       eventBus.$emit(new SaveEvent(SaveEvent.STOP_SAVING))
+      if (!id) {
+        eventBus.$emit(new ModelEvent(ModelEvent.ADD))
+      }
 
       const data = result.data.data
       const model = this.createModel(data)
@@ -124,6 +128,7 @@ class ApiClient {
       })
 
       eventBus.$emit(new SaveEvent(SaveEvent.STOP_SAVING))
+      eventBus.$emit(new ModelEvent(ModelEvent.DELETE))
 
       return true
     } catch (e) {
@@ -132,6 +137,17 @@ class ApiClient {
         message: new ApiError(e).message
       }))
       eventBus.$emit(new SaveEvent(SaveEvent.STOP_SAVING))
+      return null
+    }
+  }
+
+  async getCount (query) {
+    try {
+      return axios.post(this.endpoint + '/count', {
+        query
+      })
+    } catch (e) {
+      console.error(e)
       return null
     }
   }
