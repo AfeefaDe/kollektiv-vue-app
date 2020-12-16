@@ -7,19 +7,25 @@ export class PageFilter extends BaseFilter {
   }
 
   toUrlParams () {
-    return {
-      page: this.value.page > 1 ? this.value.page.toString() : undefined
-      // page_size: this.value.page_size.toString()
+    if (this.value.page > 1) {
+      return {
+        page: this.value.page.toString()
+        // page_size: this.value.page_size.toString()
+      }
     }
+
+    return {}
   }
 
   toApiFilter () {
     return this.value
   }
 
-  initFromUrl (queryString) {
+  initFromQuerySource (queryString) {
     if (queryString.page) {
       this.value.page = parseInt(queryString.page)
+    } else {
+      this.reset()
     }
 
     // if (queryString.page_size) {

@@ -13,9 +13,13 @@ export class BaseFilter {
   }
 
   toUrlParams () {
-    return {
-      [this.name]: this.value ? this.value.toString() : undefined
+    if (this.value) {
+      return {
+        [this.name]: this.value
+      }
     }
+
+    return {}
   }
 
   toApiFilter () {
@@ -24,9 +28,11 @@ export class BaseFilter {
     }
   }
 
-  initFromUrl (queryString) {
+  initFromQuerySource (queryString) {
     if (queryString[this.name]) {
       this.value = queryString[this.name]
+    } else {
+      this.value = null
     }
   }
 

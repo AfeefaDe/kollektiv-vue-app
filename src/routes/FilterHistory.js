@@ -1,16 +1,16 @@
 class FilterHistory {
   filters = {}
-  invalidFilters = {}
+  validFilters = {}
 
-  getFilters (path, filters) {
-    if (!this.filters[path] || this.invalidFilters[path]) {
-      this.filters[path] = filters.map(f => f.clone())
+  getFilters (key, filterConfig) {
+    if (!this.filters[key] || this.validFilters[key] === false) {
+      this.filters[key] = filterConfig.map(f => f.clone())
     }
-    return this.filters[path]
+    return this.filters[key]
   }
 
-  markFiltersInvalid (path) {
-    this.invalidFilters[path] = true
+  markFiltersValid (key, valid) {
+    this.validFilters[key] = valid
   }
 }
 
