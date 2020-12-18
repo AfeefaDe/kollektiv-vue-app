@@ -1,4 +1,4 @@
-import { filterHistory } from '@kvue/routes/FilterHistory'
+import { filterHistory } from './FilterHistory'
 
 export class Filters {
   key = null
@@ -34,6 +34,9 @@ export class Filters {
     }
 
     this.filters.forEach(f => f.initFromQuerySource(query))
+
+    this.lastQuery = query
+
     return true
   }
 
