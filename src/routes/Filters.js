@@ -63,18 +63,9 @@ export class Filters {
 
   serialize () {
     return this.filters.reduce(function (map, filter) {
-      if (filter.value) {
-        map[filter.name] = filter.value
-      }
-      return map
-    }, {})
-  }
-
-  serializeStored () {
-    const filters = filterHistory.getFilters(this.key, this.filterConfig)
-    return filters.reduce(function (map, filter) {
-      if (filter.value) {
-        map[filter.name] = filter.value
+      map = {
+        ...map,
+        ...filter.serialize()
       }
       return map
     }, {})

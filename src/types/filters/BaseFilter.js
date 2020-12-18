@@ -22,10 +22,14 @@ export class BaseFilter {
     return {}
   }
 
-  toApiFilter () {
-    return {
-      [this.name]: this.value || undefined
+  serialize () {
+    if (this.value) {
+      return {
+        [this.name]: this.value
+      }
     }
+
+    return {}
   }
 
   initFromQuerySource (queryString) {

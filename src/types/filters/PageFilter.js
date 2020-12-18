@@ -17,8 +17,10 @@ export class PageFilter extends BaseFilter {
     return {}
   }
 
-  toApiFilter () {
-    return this.value
+  serialize () {
+    return {
+      [this.name]: this.value
+    }
   }
 
   initFromQuerySource (queryString) {
