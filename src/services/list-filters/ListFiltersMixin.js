@@ -7,10 +7,6 @@ import { RouteQuerySource } from './RouteQuerySource'
 export class ListFiltersMixin extends Vue {
   lfm_filters = null
 
-  created () {
-    this.lfm_init()
-  }
-
   lfm_init () {
     this.lfm_filters = new Filters(
       this.$route.path,
