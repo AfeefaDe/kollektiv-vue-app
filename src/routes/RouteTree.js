@@ -43,10 +43,11 @@ export class RouteTree {
   }
 
   get title () {
-    if (typeof this.component.title === 'string') {
-      return this.component.title
+    const breadcrumb = this.component.breadcrumb
+    if (typeof breadcrumb.title === 'string') {
+      return breadcrumb.title
     }
-    return this.component.title(this.routeConfig, this.routeOptions)
+    return breadcrumb.title(this.routeConfig, this.routeOptions)
   }
 
   get to () {

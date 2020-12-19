@@ -23,6 +23,7 @@ class Routes {
   }
 
   setRouteTitle (routeName, title) {
+    routeName = routeName.replace(/\.edit/, '.detail')
     this.currentRouteTitles[routeName] = title
     eventBus.$emit(new RouteEvent(RouteEvent.CHANGE))
   }
@@ -49,10 +50,13 @@ class Routes {
       }
     }
 
-    routes = routes.map(routeTree => ({
-      title: this.currentRouteTitles[routeTree.routeName] || routeTree.title,
-      to: {name: routeTree.routeName, params: this.currentRouteParams}
-    }))
+    routes = routes.map(routeTree => {
+      const routeName = routeTree.routeName
+      return {
+        title: this.currentRouteTitles[routeName] || routeTree.title,
+        to: {name: routeName, params: this.currentRouteParams}
+      }
+    })
 
     return routes
   }

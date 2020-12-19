@@ -21,11 +21,6 @@ export class RouteComponentMixin extends Vue {
   }
 
   rcm_setRouteTitle (title) {
-    let routeName = this.routeConfig.routeName
-    if (routeName.match(/\.edit/)) {
-      routeName = routeName.replace(/\.edit/, '.detail')
-    }
-
-    routes.setRouteTitle(routeName, title)
+    routes.setRouteTitle(this.routeConfig.routeName, title)
   }
 }

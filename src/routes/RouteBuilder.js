@@ -75,7 +75,7 @@ export class RouteBuilder {
 
     return {
       path: ':' + idKey,
-      component: DefaultRouteComponent,
+      component: routeConfig.components.model.component,
       props: route => {
         return {
           routeConfig: {
