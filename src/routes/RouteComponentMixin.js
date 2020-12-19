@@ -3,16 +3,16 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import { routes } from './Routes'
 
 @Component({
-  props: ['routeConfig', 'routeOptions']
+  props: ['routeName', 'routeSet']
 })
 export class RouteComponentMixin extends Vue {
   created () {
-    routes.setComponent(this.routeConfig.routeName, this.$route.params)
+    routes.setComponent(this.routeSet, this.routeName, this.$route.params)
   }
 
-  @Watch('routeConfig.routeName')
+  @Watch('routeName')
   rcm_routeNameChangedInternal () {
-    routes.setComponent(this.routeConfig.routeName, this.$route.params)
+    routes.setComponent(this.routeSet, this.routeName, this.$route.params)
     this.rcm_routeNameChanged()
   }
 
@@ -21,6 +21,6 @@ export class RouteComponentMixin extends Vue {
   }
 
   rcm_setRouteTitle (title) {
-    routes.setRouteTitle(this.routeConfig.routeName, title)
+    routes.setRouteTitle(this.routeSet, title)
   }
 }

@@ -2,63 +2,30 @@ import { eventBus } from '../events/EventBus'
 import { RouteEvent } from './RouteEvent'
 
 class Routes {
-  routes = []
-  routeTree = null
-
+  currentRouteSet = null
   currentRouteName = null
-  currentRouteComponent = null
-  currentRouteTitles = {}
+  currentRouteParams = null
 
-  setRouteTree (routeTree) {
-    this.routeTree = routeTree
-  }
+  setComponent (routeSet, routeName, routeParams) {
+    this.currentRouteSet = routeSet
+    this.currentRouteName = routeName
+    this.currentRouteParams = routeParams
 
-  setComponent (routeName, routeParams) {
-    const treeItem = this.routeTree.find(routeName)
-    if (treeItem) {
-      this.currentRouteName = routeName
-      this.currentRouteParams = routeParams
-      eventBus.$emit(new RouteEvent(RouteEvent.CHANGE))
-    }
-  }
-
-  setRouteTitle (routeName, title) {
-    routeName = routeName.replace(/\.edit/, '.detail')
-    this.currentRouteTitles[routeName] = title
     eventBus.$emit(new RouteEvent(RouteEvent.CHANGE))
   }
 
-  get () {
-    let routes = []
+  setRouteTitle (routeSet, title) {
+    routeSet.setModelTitle(title)
 
-    if (!this.currentRouteName) {
-      return routes
+    eventBus.$emit(new RouteEvent(RouteEvent.CHANGE))
+  }
+
+  toBreadcrumb () {
+    if (!this.currentRouteSet) {
+      return []
     }
 
-    let treeItem = this.routeTree.find(this.currentRouteName)
-
-    if (!treeItem) {
-      return routes
-    }
-
-    routes.push(treeItem)
-
-    while (treeItem.parent) {
-      treeItem = treeItem.parent
-      if (treeItem.routeName) {
-        routes.unshift(treeItem)
-      }
-    }
-
-    routes = routes.map(routeTree => {
-      const routeName = routeTree.routeName
-      return {
-        title: this.currentRouteTitles[routeName] || routeTree.title,
-        to: {name: routeName, params: this.currentRouteParams}
-      }
-    })
-
-    return routes
+    return this.currentRouteSet.toBreadcrumb(this.currentRouteName, this.currentRouteParams)
   }
 }
 

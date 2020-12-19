@@ -6,9 +6,7 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import { RouteComponentMixin } from './RouteComponentMixin'
 
-@Component({
-  props: ['routeConfig', 'routeOptions']
-})
+@Component
 export default class DefaultRouteComponent extends Mixins(RouteComponentMixin) {
 }
 </script>
