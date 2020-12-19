@@ -1,9 +1,7 @@
 import axios from 'axios'
 
-import { AlertEvent } from '../events/AlertEvent'
+import { AlertEvent, ModelEvent, SaveEvent } from '../events'
 import { eventBus } from '../events/EventBus'
-import { ModelEvent } from '../events/ModelEvent'
-import { SaveEvent } from '../events/SaveEvent'
 import { typeLoader } from '../types/TypeLoader'
 import { timeout } from '../utils/timeout'
 import { ApiError } from './ApiError'
