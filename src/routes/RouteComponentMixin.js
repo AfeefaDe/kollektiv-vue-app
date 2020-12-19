@@ -7,12 +7,12 @@ import { routes } from './Routes'
 })
 export class RouteComponentMixin extends Vue {
   created () {
-    routes.setComponent(this.routeConfig.routeName, this.$props)
+    routes.setComponent(this.routeConfig.routeName, this.$route.params)
   }
 
   @Watch('routeConfig.routeName')
   rcm_routeNameChangedInternal () {
-    routes.setComponent(this.routeConfig.routeName, this.$props)
+    routes.setComponent(this.routeConfig.routeName, this.$route.params)
     this.rcm_routeNameChanged()
   }
 

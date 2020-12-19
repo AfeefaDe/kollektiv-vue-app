@@ -13,11 +13,11 @@ class Routes {
     this.routeTree = routeTree
   }
 
-  setComponent (routeName, params) {
+  setComponent (routeName, routeParams) {
     const treeItem = this.routeTree.find(routeName)
     if (treeItem) {
       this.currentRouteName = routeName
-      this.currentRouteParams = params
+      this.currentRouteParams = routeParams
       eventBus.$emit(new RouteEvent(RouteEvent.CHANGE))
     }
   }
