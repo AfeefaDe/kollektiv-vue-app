@@ -1,8 +1,35 @@
 import DefaultRouteComponent from './DefaultRouteComponent'
+import { RouteTree } from './RouteTree'
 
 export class RouteBuilder {
   pathNew = 'new'
   pathEdit = 'edit'
+
+  routeTree = new RouteTree()
+
+  getContainer (routeConfig, routeOptions = {}) {
+    const {path: routePath} = routeConfig
+
+    return {
+      path: routePath,
+      component: DefaultRouteComponent,
+      props: () => {
+        return {
+          routeConfig: {
+            ...routeConfig,
+            routeName: `${routeConfig.name}.container`
+          },
+          routeOptions
+        }
+      },
+
+      children: [
+        this.getList(routeConfig, routeOptions),
+        this.getNew(routeConfig, routeOptions),
+        this.getModel(routeConfig, routeOptions)
+      ]
+    }
+  }
 
   getList (routeConfig, routeOptions = {}) {
     const routeName = `${routeConfig.name}.list`
@@ -10,7 +37,7 @@ export class RouteBuilder {
     return {
       path: '',
       name: routeName,
-      component: routeConfig.components.list,
+      component: routeConfig.components.list.component,
       props: () => {
         return {
           routeConfig: {
@@ -29,7 +56,7 @@ export class RouteBuilder {
     return {
       path: this.pathNew,
       name: routeName,
-      component: routeConfig.components.new,
+      component: routeConfig.components.new.component,
       props: () => {
         return {
           routeConfig: {
@@ -43,13 +70,37 @@ export class RouteBuilder {
     }
   }
 
+  getModel (routeConfig, routeOptions = {}) {
+    const {idKey} = routeConfig
+
+    return {
+      path: ':' + idKey,
+      component: DefaultRouteComponent,
+      props: route => {
+        return {
+          routeConfig: {
+            ...routeConfig,
+            routeName: `${routeConfig.name}.model`
+          },
+          routeOptions,
+          id: route.params[idKey]
+        }
+      },
+
+      children: [
+        this.getDetail(routeConfig, routeOptions),
+        this.getEdit(routeConfig, routeOptions)
+      ]
+    }
+  }
+
   getDetail (routeConfig, routeOptions = {}) {
     const routeName = `${routeConfig.name}.detail`
 
     return {
       path: '',
       name: routeName,
-      component: routeConfig.components.detail,
+      component: routeConfig.components.detail.component,
       props: route => {
         return {
           routeConfig: {
@@ -69,7 +120,7 @@ export class RouteBuilder {
     return {
       path: this.pathEdit,
       name: routeName,
-      component: routeConfig.components.edit,
+      component: routeConfig.components.edit.component,
       props: route => {
         return {
           routeConfig: {
@@ -84,46 +135,37 @@ export class RouteBuilder {
   }
 
   getModelRoute (routeConfig, routeOptions = {}) {
-    routeConfig = {...routeConfig}
-    const {path: routePath, idKey} = routeConfig
-
-    return {
-      path: routePath,
-      component: DefaultRouteComponent,
-      props: () => {
-        return {
-          routeConfig: {
-            ...routeConfig,
-            routeName: `${routeConfig.name}.container`
-          },
-          routeOptions
-        }
-      },
+    this.routeTree.addChildren({
+      routeName: `${routeConfig.name}.list`,
+      component: routeConfig.components.list,
+      routeConfig,
+      routeOptions,
 
       children: [
-        this.getList(routeConfig, routeOptions),
-        this.getNew(routeConfig, routeOptions),
-
         {
-          path: ':' + idKey,
-          component: DefaultRouteComponent,
-          props: route => {
-            return {
-              routeConfig: {
-                ...routeConfig,
-                routeName: `${routeConfig.name}.model`
-              },
-              routeOptions,
-              id: route.params[idKey]
-            }
-          },
+          routeName: `${routeConfig.name}.new`,
+          component: routeConfig.components.new,
+          routeConfig,
+          routeOptions
+        },
+        {
+          routeName: `${routeConfig.name}.detail`,
+          component: routeConfig.components.detail,
+          routeConfig,
+          routeOptions,
 
           children: [
-            this.getDetail(routeConfig, routeOptions),
-            this.getEdit(routeConfig, routeOptions)
+            {
+              routeName: `${routeConfig.name}.edit`,
+              component: routeConfig.components.edit,
+              routeConfig,
+              routeOptions
+            }
           ]
         }
       ]
-    }
+    })
+
+    return this.getContainer(routeConfig, routeOptions)
   }
 }
