@@ -43,6 +43,9 @@ export class RouteTree {
   }
 
   get title () {
+    if (typeof this.component.title === 'string') {
+      return this.component.title
+    }
     return this.component.title(this.routeConfig, this.routeOptions)
   }
 
