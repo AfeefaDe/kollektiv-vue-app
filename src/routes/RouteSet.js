@@ -65,7 +65,7 @@ export class RouteSet {
           to: {name: `${this.name}.list`}
         },
         {
-          title: this.modelTitle || this.getTitle('new'),
+          title: this.getTitle('new'),
           to: {name: `${this.name}.new`}
         }
       )
